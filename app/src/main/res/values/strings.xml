@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Guillaume Desrumaux ♥</string>
+    <string name="login_title">Connexion</string>
+    <string name="alt_description_logo">Logo ISEN-Toulon</string>
+    <string name="homeActivity_title">Bonjour !</string>
+    <string name="alt_home_lifeCycle">Icone de cycle de vie</string>
+    <string name="alt_home_save">Icone de sauvegarde</string>
+    <string name="alt_home_permissions">Icone des permissions</string>
+    <string name="alt_home_webservices">Icone de webservices</string>
+    <string name="home_lifecycle">Cycle de vie</string>
+    <string name="home_save">Sauvegarde</string>
+    <string name="home_permissions">Permissions</string>
+    <string name="home_webservices">Webservices</string>
+    <string name="login_error_empty">Merci de remplir tous les champs</string>
+    <string name="login_success">Authentification réussie</string>
+    <string name="login_success_sharedpref">Authentification réussie par SharedPreferences</string>
+    <string name="login_error_wrongValues">Le couple identifiant / mot de passe est incorrect</string>
+    <string name="disconnect_button_text">Déconnexion</string>
+    <string name="login_id_hint">Identifiant :</string>
+    <string name="login_pw_hint">Mot de passe :</string>
+    <string name="login_button_validate">Valider</string>
+    <string name="login_tittle">Connexion</string>
+    <string name="userinfo_title">Veuillez entrer vos informations :</string>
+    <string name="userinfo_firstname_hint">Prénom</string>
+    <string name="userinfo_lastname_hint">Nom</string>
+    <string name="userinfo_read_btn">Lecture</string>
+    <string name="userinfo_save_btn">Sauvegarde</string>
+    <string name="userinfo_date_value">../../....</string>
+    <string name="userinfo_date">Date de naissance :</string>
+    <string name="info_title_text">Accès aux informations Android</string>
+    <string name="info_alt_photo_icon">Icone d\'un appareil photo</string>
+    <string name="info_latitude_defaultText">Latitude : %1$s</string>
+    <string name="info_longitude_defaultText">Longitude : %1$s</string>
+    <string name="info_contact_default_text">Nom : %1$s</string>
+    <string name="info_location_search">Recherche de la position …</string>
+    <string name="text_coucou_fragment">Coucou</string>
+    <string name="btn_change_fragment">Changer fragment</string>
+    <string name="web_error_message">Erreur dans la récupération des données de l\'API</string>
+    <string name="permissions_error_message">Vous devez accepter les autorisations pour pouvoir accéder à cette page
+    </string>
+</resources>
