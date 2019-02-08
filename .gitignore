@@ -72,3 +72,11 @@ fastlane/readme.md
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+\.idea/modules\.xml
+
+\.idea/misc\.xml
+
+\.idea/vcs\.xml
+
+build\.gradle
