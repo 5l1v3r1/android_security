@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.desrumaux.androidtoolbox.R
+import com.desrumaux.androidtoolbox.model.SafetyNet.SafetyAPI
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -27,7 +30,8 @@ class LoginActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
         val savedId = sharedPreferences.getString("ID", "") ?: ""
         val savedPassword = sharedPreferences.getString("PW", "") ?: ""
-
+        val Safety = SafetyAPI(this)
+        Safety.sendSafetyNetRequest()
         if (isCredentialsOK(savedId, savedPassword)) {
             toastInfo(getString(R.string.login_success_sharedpref))
             goToHome(true)
