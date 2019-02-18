@@ -3,6 +3,7 @@ package com.desrumaux.androidtoolbox.model.SafetyNet
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
+import com.desrumaux.androidtoolbox.BuildConfig
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -19,6 +20,7 @@ import org.json.JSONObject
 open class SafetyAPI(context : Activity) {
 
     private val activity: Activity = context
+    private var isAllowed: Boolean ?= null
 
     private fun isGooglePlayAvailable(): Boolean {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity)
@@ -31,19 +33,17 @@ open class SafetyAPI(context : Activity) {
     }
 
     fun sendSafetyNetRequest() {
-        isGooglePlayAvailable()
         if(isGooglePlayAvailable()){
             val data: String = "abcdefghijklmnopqrstuvwxyz478994lpkihhgfrdsesrdtfghjkknjbhgytt"
             val safetyNetClient: SafetyNetClient = SafetyNet.getClient(activity)
+            val jsonObject: JSONObject? = JSONObject()
+
             val task: Task<SafetyNetApi.AttestationResponse> = safetyNetClient.attest(data.toByteArray(), "AIzaSyCx90qtPsXRqFcnmjgpf_by0XjYRbnXQPo")
 
             task.addOnSuccessListener(activity) { response: SafetyNetApi.AttestationResponse ->
                 val jsonResult = response.jwsResult
-                val jsonObject: JSONObject? = JSONObject()
                 jsonObject?.put("signedAttestation", jsonResult.toString())
-
                 googleAPIValidation(jsonObject)
-
                 Toast.makeText(activity,jsonResult, Toast.LENGTH_LONG).show()
             }.addOnFailureListener(activity) { e: Exception ->
                 if (e is ApiException) {
@@ -57,8 +57,7 @@ open class SafetyAPI(context : Activity) {
 
     private fun googleAPIValidation(jsonObject: JSONObject?) {
         val queue = Volley.newRequestQueue(this.activity)
-        val url =
-            "https://www.googleapis.com/androidcheck/v1/attestations/verify?key=AIzaSyCx90qtPsXRqFcnmjgpf_by0XjYRbnXQPo"
+        val url = "https://www.googleapis.com/androidcheck/v1/attestations/verify?key="+BuildConfig.safetynet_api_key
 
         // Request a string response from the provided URL.
         val stringRequest = object : JsonObjectRequest(
@@ -78,10 +77,11 @@ open class SafetyAPI(context : Activity) {
         queue.add(stringRequest)
     }
 
-    private fun validationResponseHandler(response: JSONObject) {
-        val isGoogleValidated = response.get("isValidSignature")
-        if (isGoogleValidated == true) {
-            Toast.makeText(activity, "Google Play Service:" + isGoogleValidated.toString(), Toast.LENGTH_SHORT).show()
+    private fun validationResponseHandler(response: JSONObject){
+        val isGoogleValidated = response.getBoolean("isValidSignature")
+        if(isGoogleValidated){
+            isAllowed = true
+            Toast.makeText(activity, "Access Granted", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def STRING = 'String'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -13,6 +15,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        each { type ->
+            type.buildConfigField STRING, 'safetynet_api_key', safetynet_api_key
+        }
     }
     buildTypes {
         release {
