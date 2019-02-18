@@ -80,3 +80,9 @@ Thumbs.db
 \.idea/vcs\.xml
 
 build\.gradle
+
+\.idea/codeStyles/Project\.xml
+
+\.idea/codeStyles/codeStyleConfig\.xml
+
+\.idea/
