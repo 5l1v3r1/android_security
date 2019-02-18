@@ -2,7 +2,9 @@ package com.desrumaux.androidtoolbox.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.android.volley.Request
@@ -10,6 +12,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.desrumaux.androidtoolbox.R
+import com.desrumaux.androidtoolbox.keystore.GlobalCryptor
 import kotlinx.android.synthetic.main.activity_home.*
 
 
@@ -41,9 +44,11 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         super.onResume()
-        takeToken()
+        //exampleKeyStore()
+        getToken()
     }
 
     private fun goBackToLogin() {
@@ -65,27 +70,36 @@ class HomeActivity : AppCompatActivity() {
         startActivity(Intent(this, destClass))
     }
 
-    private fun takeToken(){
+    private fun getToken() {
         val queue = Volley.newRequestQueue(this)
-        //val url = "https://randomuser.me/api/?exc=login,cell,id"
         val url = "http://10.211.55.5/?token=yes"
-        var text : String
         // Request a string response from the provided URL.
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             Response.Listener<String> { response ->
-                // Display the first 500 characters of the response string.
-                text = "Token : $response"
+                val text = response
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(applicationContext, text, duration)
                 toast.show()
             },
             Response.ErrorListener {
-                text = "Impossible d'accéder au service !"
+                val text = "Impossible d'accéder au service !"
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(applicationContext, text, duration)
                 toast.show()
             })
         queue.add(stringRequest)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun exampleKeyStore() {
+        val keyStore = GlobalCryptor()
+
+        keyStore.encryptText("key-thibaut", "feffefefef")
+        val decreptedText = keyStore.decryptText("key-thibaut")
+
+        val duration = Toast.LENGTH_SHORT
+        val toast = Toast.makeText(applicationContext, decreptedText, duration)
+        toast.show()
     }
 }
