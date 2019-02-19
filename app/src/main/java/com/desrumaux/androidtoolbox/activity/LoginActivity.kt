@@ -58,8 +58,6 @@ class LoginActivity : AppCompatActivity() {
             auth(emailInput.text.toString(), passwordInput.text.toString())
             emailInput.text?.clear()
             passwordInput.text?.clear()
-
-            toastInfo(getString(R.string.login_success))
         }
     }
 
@@ -105,6 +103,5 @@ class LoginActivity : AppCompatActivity() {
                 toast.show()
             })
         queue.add(stringRequest)
-
     }
 }
