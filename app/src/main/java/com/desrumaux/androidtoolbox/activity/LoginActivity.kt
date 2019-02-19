@@ -12,7 +12,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.desrumaux.androidtoolbox.R
-import com.desrumaux.androidtoolbox.model.SafetyNet.SafetyAPI
 import com.desrumaux.androidtoolbox.model.Server.ServerAPI
 import kotlinx.android.synthetic.main.activity_login.*
 

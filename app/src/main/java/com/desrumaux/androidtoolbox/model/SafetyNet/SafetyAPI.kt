@@ -3,7 +3,6 @@ package com.desrumaux.androidtoolbox.model.SafetyNet
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
-import com.desrumaux.androidtoolbox.BuildConfig
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -14,8 +13,8 @@ import com.google.android.gms.safetynet.SafetyNetClient
 import com.google.android.gms.tasks.Task
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.desrumaux.androidtoolbox.model.Server.ServerAPI
 import org.json.JSONObject
+import kotlin.system.exitProcess
 
 
 open class SafetyAPI(context : Activity, key : String, token : ByteArray) {
@@ -68,6 +67,11 @@ open class SafetyAPI(context : Activity, key : String, token : ByteArray) {
                 Toast.makeText(activity,response.toString(), Toast.LENGTH_SHORT).show()
                 if(isAllowed == true){
                     Toast.makeText(activity,"Access Granted", Toast.LENGTH_SHORT).show()
+                    token.drop(500)
+                    key = ""
+
+                }else{
+                    exitProcess(-1)
                 }
             },
             Response.ErrorListener {}) {
