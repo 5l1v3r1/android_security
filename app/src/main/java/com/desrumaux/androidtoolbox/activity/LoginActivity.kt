@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.desrumaux.androidtoolbox.R
 import com.desrumaux.androidtoolbox.model.SafetyNet.SafetyAPI
 import kotlinx.android.synthetic.main.activity_login.*
@@ -30,9 +34,8 @@ class LoginActivity : AppCompatActivity() {
         val savedPassword = sharedPreferences.getString("PW", "") ?: ""
         val Safety = SafetyAPI(this)
         Safety.sendSafetyNetRequest()
-        if (isCredentialsOK(savedId, savedPassword)) {
-            toastInfo(getString(R.string.login_success_sharedpref))
-            goToHome(true)
+        if (!savedId.isEmpty() && !savedPassword.isEmpty()) {
+            auth(savedId,savedPassword)
         }
     }
 
@@ -51,15 +54,11 @@ class LoginActivity : AppCompatActivity() {
         if (emailInput.text.toString().isEmpty() || passwordInput.text.toString().isEmpty()) {
             toastInfo(getString(R.string.login_error_empty))
         } else {
-            if (isCredentialsOK(emailInput.text.toString(), passwordInput.text.toString())) {
-                saveUserPref(emailInput.text.toString(), passwordInput.text.toString())
-                emailInput.text?.clear()
-                passwordInput.text?.clear()
-                toastInfo(getString(R.string.login_success))
-                goToHome(true)
-            } else {
-                toastInfo(getString(R.string.login_error_wrongValues))
-            }
+            auth(emailInput.text.toString(), passwordInput.text.toString())
+            emailInput.text?.clear()
+            passwordInput.text?.clear()
+
+            toastInfo(getString(R.string.login_success))
         }
     }
 
@@ -75,5 +74,36 @@ class LoginActivity : AppCompatActivity() {
         if (clearCache) intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         if (clearCache) finish()
+    }
+
+    private fun auth(mail: String, pass: String) {
+        val queue = Volley.newRequestQueue(this)
+        val url = "http://10.211.55.5/?param=authent&mail=" + mail + "&pass=" + pass
+        // Request
+        // a string response from the provided URL.
+        val reponse = Response.Listener<String> { response ->
+            val text = response
+            if (text == "1") {
+                saveUserPref(mail,pass)
+                toastInfo(getString(R.string.login_success_sharedpref))
+                goToHome(true)
+            } else {
+                val dtext = "Connexion refusée"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(applicationContext, dtext, duration)
+                toast.show()
+            }
+        }
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            reponse,
+            Response.ErrorListener {
+                val dtext = "Impossible d'accéder au service d'authentification! Veuillez réessayer plus tard."
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(applicationContext, dtext, duration)
+                toast.show()
+            })
+        queue.add(stringRequest)
+
     }
 }
