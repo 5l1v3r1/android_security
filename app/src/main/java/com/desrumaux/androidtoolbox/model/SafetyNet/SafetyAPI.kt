@@ -14,6 +14,7 @@ import com.google.android.gms.safetynet.SafetyNetClient
 import com.google.android.gms.tasks.Task
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.desrumaux.androidtoolbox.model.Server.ServerAPI
 import org.json.JSONObject
 
 
@@ -34,6 +35,7 @@ open class SafetyAPI(context : Activity) {
 
     fun sendSafetyNetRequest() {
         if(isGooglePlayAvailable()){
+            val serverAPI : ServerAPI = ServerAPI(activity)
             val data: String = "abcdefghijklmnopqrstuvwxyz478994lpkihhgfrdsesrdtfghjkknjbhgytt"
             val safetyNetClient: SafetyNetClient = SafetyNet.getClient(activity)
             val jsonObject: JSONObject? = JSONObject()
@@ -63,7 +65,10 @@ open class SafetyAPI(context : Activity) {
         val stringRequest = object : JsonObjectRequest(
             Method.POST, url, jsonObject,
             Response.Listener { response ->
-                validationResponseHandler(response)
+                isAllowed = validationResponseHandler(response)
+                if(isAllowed == true){
+                    Toast.makeText(activity,"Access Granted", Toast.LENGTH_SHORT).show()
+                }
             },
             Response.ErrorListener {}) {
 
@@ -77,11 +82,11 @@ open class SafetyAPI(context : Activity) {
         queue.add(stringRequest)
     }
 
-    private fun validationResponseHandler(response: JSONObject){
+    private fun validationResponseHandler(response: JSONObject): Boolean{
         val isGoogleValidated = response.getBoolean("isValidSignature")
-        if(isGoogleValidated){
-            isAllowed = true
-            Toast.makeText(activity, "Access Granted", Toast.LENGTH_SHORT).show()
+        when(isGoogleValidated){
+            true -> return true
+            false -> return false
         }
     }
 }

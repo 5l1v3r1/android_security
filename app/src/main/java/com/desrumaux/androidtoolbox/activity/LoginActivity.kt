@@ -9,8 +9,6 @@ import android.view.View
 import android.widget.Toast
 import com.desrumaux.androidtoolbox.R
 import com.desrumaux.androidtoolbox.model.SafetyNet.SafetyAPI
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 
