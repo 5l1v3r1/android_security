@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun auth(mail: String, pass: String) {
         val queue = Volley.newRequestQueue(this)
-        val url = "http://10.211.55.5/?param=authent&user=" + mail + "&password=" + pass
+        val url = "http://10.211.55.5/?param=authent&user=$mail&password=$pass"
         // Request
         // a string response from the provided URL.
         val reponse = Response.Listener<String> { response ->
