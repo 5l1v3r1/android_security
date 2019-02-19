@@ -18,10 +18,13 @@ import com.desrumaux.androidtoolbox.model.Server.ServerAPI
 import org.json.JSONObject
 
 
-open class SafetyAPI(context : Activity) {
+open class SafetyAPI(context : Activity, key : String, token : ByteArray) {
 
     private val activity: Activity = context
     private var isAllowed: Boolean ?= null
+    private var key : String = key
+    private var token : ByteArray = token
+
 
     private fun isGooglePlayAvailable(): Boolean {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity)
@@ -35,12 +38,9 @@ open class SafetyAPI(context : Activity) {
 
     fun sendSafetyNetRequest() {
         if(isGooglePlayAvailable()){
-            val serverAPI : ServerAPI = ServerAPI(activity)
-            val data: String = "abcdefghijklmnopqrstuvwxyz478994lpkihhgfrdsesrdtfghjkknjbhgytt"
             val safetyNetClient: SafetyNetClient = SafetyNet.getClient(activity)
             val jsonObject: JSONObject? = JSONObject()
-
-            val task: Task<SafetyNetApi.AttestationResponse> = safetyNetClient.attest(data.toByteArray(), "AIzaSyCx90qtPsXRqFcnmjgpf_by0XjYRbnXQPo")
+            val task: Task<SafetyNetApi.AttestationResponse> = safetyNetClient.attest(token,key)
 
             task.addOnSuccessListener(activity) { response: SafetyNetApi.AttestationResponse ->
                 val jsonResult = response.jwsResult
@@ -59,13 +59,13 @@ open class SafetyAPI(context : Activity) {
 
     private fun googleAPIValidation(jsonObject: JSONObject?) {
         val queue = Volley.newRequestQueue(this.activity)
-        val url = "https://www.googleapis.com/androidcheck/v1/attestations/verify?key="+BuildConfig.safetynet_api_key
+        val url = "https://www.googleapis.com/androidcheck/v1/attestations/verify?key="+key
 
-        // Request a string response from the provided URL.
         val stringRequest = object : JsonObjectRequest(
             Method.POST, url, jsonObject,
             Response.Listener { response ->
                 isAllowed = validationResponseHandler(response)
+                Toast.makeText(activity,response.toString(), Toast.LENGTH_SHORT).show()
                 if(isAllowed == true){
                     Toast.makeText(activity,"Access Granted", Toast.LENGTH_SHORT).show()
                 }
