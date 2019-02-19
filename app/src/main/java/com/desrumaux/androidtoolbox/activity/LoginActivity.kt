@@ -63,9 +63,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun isCredentialsOK(id: String, password: String) =
-        id == "admin" && password == "123"
-
     private fun toastInfo(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
@@ -79,14 +76,17 @@ class LoginActivity : AppCompatActivity() {
 
     private fun auth(mail: String, pass: String) {
         val queue = Volley.newRequestQueue(this)
-        val url = "http://10.211.55.5/?param=authent&mail=" + mail + "&pass=" + pass
+        val url = "http://10.211.55.5/?param=authent&user=" + mail + "&password=" + pass
         // Request
         // a string response from the provided URL.
         val reponse = Response.Listener<String> { response ->
             val text = response
             if (text == "1") {
                 saveUserPref(mail,pass)
-                toastInfo(getString(R.string.login_success_sharedpref))
+                val dtext = "Connexion Acceptée: $response"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(applicationContext, dtext, duration)
+                toast.show()
                 goToHome(true)
             } else {
                 val dtext = "Connexion refusée"
