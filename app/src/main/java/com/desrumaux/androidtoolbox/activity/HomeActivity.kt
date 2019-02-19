@@ -7,10 +7,6 @@ import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.desrumaux.androidtoolbox.R
 import com.desrumaux.androidtoolbox.keystore.GlobalCryptor
 import kotlinx.android.synthetic.main.activity_home.*
@@ -48,7 +44,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         //exampleKeyStore()
-        getToken()
     }
 
     private fun goBackToLogin() {
@@ -68,27 +63,6 @@ class HomeActivity : AppCompatActivity() {
 
     private fun goToActivity(destClass: Class<*>) {
         startActivity(Intent(this, destClass))
-    }
-
-    private fun getToken() {
-        val queue = Volley.newRequestQueue(this)
-        val url = "http://10.211.55.5/?token=yes"
-        // Request a string response from the provided URL.
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            Response.Listener<String> { response ->
-                val text = response
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(applicationContext, text, duration)
-                toast.show()
-            },
-            Response.ErrorListener {
-                val text = "Impossible d'accéder au service !"
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(applicationContext, text, duration)
-                toast.show()
-            })
-        queue.add(stringRequest)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
