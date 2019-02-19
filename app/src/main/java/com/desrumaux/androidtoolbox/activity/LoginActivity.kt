@@ -13,6 +13,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.desrumaux.androidtoolbox.R
 import com.desrumaux.androidtoolbox.model.SafetyNet.SafetyAPI
+import com.desrumaux.androidtoolbox.model.Server.ServerAPI
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -32,8 +33,8 @@ class LoginActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
         val savedId = sharedPreferences.getString("ID", "") ?: ""
         val savedPassword = sharedPreferences.getString("PW", "") ?: ""
-        val Safety = SafetyAPI(this)
-        Safety.sendSafetyNetRequest()
+
+        val serverAPI = ServerAPI(this)
         if (!savedId.isEmpty() && !savedPassword.isEmpty()) {
             auth(savedId,savedPassword)
         }
