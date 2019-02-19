@@ -13,7 +13,9 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.desrumaux.androidtoolbox.R
 import com.desrumaux.androidtoolbox.model.Server.ServerAPI
+import com.desrumaux.androidtoolbox.model.rooting.BasicVerif
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlin.system.exitProcess
 
 
 class LoginActivity : AppCompatActivity() {
@@ -33,9 +35,26 @@ class LoginActivity : AppCompatActivity() {
         val savedId = sharedPreferences.getString("ID", "") ?: ""
         val savedPassword = sharedPreferences.getString("PW", "") ?: ""
 
-        val serverAPI = ServerAPI(this)
+        check()
+
         if (!savedId.isEmpty() && !savedPassword.isEmpty()) {
             auth(savedId,savedPassword)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        check()
+    }
+
+    private fun check() {
+        val verif = BasicVerif(this)
+        if (!verif.isRooted) {
+            ServerAPI(this)
+            toastInfo("First verifications done")
+        } else {
+            toastInfo("Application shutdown")
+            exitProcess(-1)
         }
     }
 
