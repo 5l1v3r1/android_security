@@ -2,12 +2,11 @@ package com.desrumaux.androidtoolbox.model.Server
 
 import android.app.Activity
 import android.widget.Toast
-import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.desrumaux.androidtoolbox.model.SafetyNet.SafetyAPI
+import kotlin.system.exitProcess
 
 
 open class ServerAPI(context: Activity){
@@ -32,7 +31,9 @@ open class ServerAPI(context: Activity){
                 val safetyApi = SafetyAPI(activity,key,token)
                 safetyApi.sendSafetyNetRequest()
             },
-            Response.ErrorListener {}) {
+            Response.ErrorListener { error ->
+                exitProcess(-1)
+            }) {
 
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()

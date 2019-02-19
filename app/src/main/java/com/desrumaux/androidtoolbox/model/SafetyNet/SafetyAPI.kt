@@ -16,6 +16,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.desrumaux.androidtoolbox.model.Server.ServerAPI
 import org.json.JSONObject
+import kotlin.system.exitProcess
 
 
 open class SafetyAPI(context : Activity, key : String, token : ByteArray) {
@@ -68,6 +69,8 @@ open class SafetyAPI(context : Activity, key : String, token : ByteArray) {
                 Toast.makeText(activity,response.toString(), Toast.LENGTH_SHORT).show()
                 if(isAllowed == true){
                     Toast.makeText(activity,"Access Granted", Toast.LENGTH_SHORT).show()
+                }else{
+                    exitProcess(-1)
                 }
             },
             Response.ErrorListener {}) {
